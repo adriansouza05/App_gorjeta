@@ -8,13 +8,14 @@ import 'view/gorjeta_view.dart';
 final g = GetIt.instance;
 
 void main() {
-
-  //registrar o controlador (gerenciador de estado)
+  // Registrar o controlador (gerenciador de estado)
   g.registerSingleton<GorjetaController>(GorjetaController());
 
   runApp(
     DevicePreview(
-      builder: (context) => const MainApp()
+      // ✅ Desativa em produção; ative só em debug
+      enabled: true,
+      builder: (context) => const MainApp(),
     ),
   );
 }
@@ -27,7 +28,10 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'GorjetaCalc',
-      home: GorjetaView(),
+      // ✅ useInheritedMediaQuery foi removido nas versões recentes — não usar
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
+      home: const GorjetaView(),
     );
   }
 }

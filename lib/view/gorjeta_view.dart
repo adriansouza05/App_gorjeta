@@ -78,6 +78,7 @@ class _GorjetaViewState extends State<GorjetaView> {
                         ),
                         onChanged: (value) {
                           //receber o valor digitado pelo usuário
+                          ctrl.setValorConta(double.tryParse(value) ?? 0.0);
                         },
                       ),
                       //
@@ -110,6 +111,9 @@ class _GorjetaViewState extends State<GorjetaView> {
                               .toList(),
                           onChanged: (value) {
                             //receber o percentual da gorjeta
+                            if (value != null) {
+                              ctrl.setPercentualGorjeta(value);
+                            }
                           },
                         ),
                       ),
@@ -121,8 +125,80 @@ class _GorjetaViewState extends State<GorjetaView> {
                         width: double.infinity,
                         height: 55,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green.shade700,
+                            foregroundColor: Colors.grey.shade200,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18),
+                            ),
+                            textStyle: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
+                          onPressed: () {
+                            //calcular o valor da gorjeta
+                            if (ctrl.valorConta > 0) {
+                              ctrl.calcularGorjeta();
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Informe o valor da conta'),
+                                ),
+                              );
+                            }
+                          },
                           child: Text('CALCULAR'),
+                        ),
+                      ),
+                      //
+                      // Exibir o resultado
+                      //
+                      SizedBox(height: 30),
+                      Card(
+                        color: Colors.green.shade50,
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(20),
+                          child: Column(
+                            children: [
+                              Text(
+                                'Gorjeta',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.green.shade900,
+                                ),
+                              ),
+                              Text(
+                                'R\$ ${ctrl.valorGorjeta}',
+                                style: TextStyle(
+                                  fontSize: 26,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              Divider(),
+                              SizedBox(height: 10),
+                              Text(
+                                'Total a pagar',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.green.shade900,
+                                ),
+                              ),
+                              Text(
+                                'R\$ ${ctrl.totalPagar}',
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
